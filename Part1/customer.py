@@ -9,6 +9,9 @@ This file contains all the classes about customer needed for the main.py file
 import csv
 import hashlib
 import os
+import re
+
+from wallet import Wallets
 
 
 class Customer_Account:

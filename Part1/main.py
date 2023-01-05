@@ -3,8 +3,11 @@
 @author: Jiageng Ding
 @time: 2023-01-02
 """
+import csv
+import os
 
-from customer import *
+from customer import Customer_Account
+from wallet import Wallets
 
 
 def transfer_to_number(s):
@@ -27,10 +30,11 @@ def init_csv():
         with open("wallets.csv", "w") as f:
             csv_writer = csv.DictWriter(f, fieldnames=Wallets.fieldnames)
             csv_writer.writeheader()
-    if not os.path.exists("bank_account.csv"):
-        with open("bank_account.csv", "w") as f:
-            csv_writer = csv.DictWriter(f, fieldnames=BankingSystem.fieldnames)
-            csv_writer.writeheader()
+    #  if not os.path.exists("bank_account.csv"):
+    #      with open("bank_account.csv", "w") as f:
+    #          csv_writer = csv.DictWriter(f, fieldnames=BankingSystem.fieldnames)
+    #          csv_writer.writeheader()
+    #
 
 
 def main():
@@ -70,6 +74,15 @@ def main():
                             continue
                         for index, wallet in enumerate(wallets):
                             print(f"{index}: {wallet.kind} {wallet.balance}")
+                    elif choice == "2":
+                        Wallets.create_wallet(user)
+                    elif choice.upper() == "Q":
+                        Customer_Account.logout()
+                        break
+                    else:
+                        print("Invalid choice")
+        else:
+            print("Invalid choice")
 
 
 if __name__ == '__main__':
