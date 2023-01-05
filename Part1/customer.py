@@ -10,19 +10,6 @@ import csv
 import hashlib
 import os
 
-#  class Customer_Account:
-#
-#      def __init__(self, first_name, last_name, residence, age, email, password,
-#                   username):
-#          """initial variables"""
-#          self.first_name = str(first_name)
-#          self.last_name = str(last_name)
-#          self.residence = str(residence)
-#          self.age = int(age)
-#          self.email = str(email)
-#          self.password = int(password)
-#          self.username = str(username)
-
 
 class Customer_Account:
 
