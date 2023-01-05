@@ -12,23 +12,34 @@ import os
 
 
 class Customer_Account:
+    fieldnames = [
+        'id', 'last_name', 'first_name', 'username', 'age', 'email',
+        'password', 'password1', 'country', 'Daily_Use', 'Saving', 'Holidays',
+        'Mortgage'
+    ]
 
     def __init__(self,
                  id,
-                 name,
+                 last_name,
                  first_name,
+                 username,
                  age,
+                 email,
                  password,
+                 password1,
                  country,
                  Daily_Use=None,
                  Saving=None,
                  Holidays=None,
                  Mortgage=None):
         self.id = id
-        self.name = name
+        self.last_name = last_name
         self.first_name = first_name
+        self.username = username
         self.age = age
         self.password = password
+        self.password1 = password1
+        self.email = email
         self.country = country
         self.Daily_Use = Daily_Use
         self.Saving = Saving
@@ -38,88 +49,121 @@ class Customer_Account:
     @classmethod
     def create_account(cls):
         while True:
-            name = input("Please enter your name(Key Q to quit): ")
-            if name.upper() == "Q":
-                break
-            first_name = input("Please enter your first name: ")
-            age = input("Please enter your age: ")
-            password1 = input("Please enter your password: ")
-            password = hashlib.md5(password1.encode()).hexdigest()
+            first_name = input("Please enter your first_name(Key Q to quit): ")
+            while True:
+                if first_name.upper() == "Q":
+                    return
+                last_name = input("Please enter your last name: ")
+                username = first_name + last_name
+                user = cls.get_user_by_username(username)
+                if user:
+                    print("The username already exists, please try again.")
+                    continue
+                else:
+                    break
+            while True:
+                age = input("Please enter your age: ")
+                if age.isdigit() and 0 < int(age) < 100:
+                    break
+                else:
+                    print("Please enter a number(0~100)!")
+            while True:
+                password = input("Please enter your password: ")
+                if 0 < len(password) < 10:
+                    break
+                else:
+                    print("Password should be 10 characters or less!")
+            while True:
+                email = input("Please enter your email: ")
+                # regex
+                email_regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                if re.match(email_regex, email):
+                    break
+                else:
+                    print("Please enter a valid email address!")
+            password1 = hashlib.md5(password.encode()).hexdigest()
             country = input("Please enter your country: ")
             if all([
-                    name.strip(),
+                    last_name.strip(),
                     first_name.strip(),
                     age.strip(),
+                    password.strip(),
                     password1.strip(),
                     country.strip()
             ]):
-                break
+                id = cls.get_id()
+                with open("customer_account.csv", "a") as f:
+                    fieldnames = [
+                        'id', 'last_name', 'first_name', 'username', 'age',
+                        'email', 'password', 'password1', 'country',
+                        'Daily_Use', 'Saving', 'Holidays', 'Mortgage'
+                    ]
+                    writer = csv.DictWriter(f, fieldnames=fieldnames)
+                    writer.writerow({
+                        "id": id,
+                        "last_name": last_name,
+                        "first_name": first_name,
+                        "username": first_name + last_name,
+                        "age": age,
+                        "password": password,
+                        "password1": password1,
+                        "email": email,
+                        "country": country,
+                        "Daily_Use": None,
+                        "Saving": None,
+                        "Holidays": None,
+                        "Mortgage": None
+                    })
+                print("Your account has been created")
+                print("Your id is: ", id)
+
+                return cls(id, last_name, first_name, username, age, email,
+                           password, password1, country)
             else:
                 print("Please enter all the information")
-        id = cls.get_id()
-        with open("customer_account.csv", "a") as f:
-            fieldnames = [
-                'id', 'name', 'first_name', 'age', 'password', 'country',
-                'Daily_Use', 'Saving', 'Holidays', 'Mortgage'
-            ]
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerow({
-                "id": id,
-                "name": name,
-                "first_name": first_name,
-                "age": age,
-                "password": password,
-                "country": country,
-                "Daily_Use": None,
-                "Saving": None,
-                "Holidays": None,
-                "Mortgage": None
-            })
-        print("Your account has been created")
-        print("Your id is: ", id)
-
-        return cls(id, name, first_name, age, password, country)
 
     @classmethod
     def login(cls):
         if not os.path.exists("customer_account.csv"):
             with open("customer_account.csv", "w") as f:
                 fieldnames = [
-                    'id', 'name', 'first_name', 'age', 'password', 'country',
-                    'Daily_Use', 'Saving', 'Holidays', 'Mortgage'
+                    'id', 'last_name', 'first_name', 'username', 'age',
+                    'email', 'password', 'password1', 'country', 'Daily_Use',
+                    'Saving', 'Holidays', 'Mortgage'
                 ]
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
         with open("customer_account.csv", "r") as f:
             reader = [i for i in csv.DictReader(f)]
             while True:
-                id = input("Please enter your id(Key Q to break): ")
-                if id.upper() == "Q":
+                username = input(
+                    "Please enter your username(Key Q to break): ")
+                if username.upper() == "Q":
                     return None
-                password1 = input("Please enter your password: ")
+                password = input("Please enter your password: ")
                 flag = False
                 for row in reader:
-                    if row["id"] == id:
+                    if row["username"] == username:
                         flag = True
-                        password1 = password1.encode()
-                        # encry the password and compare it with the password in the file
-                        password = hashlib.md5(password1).hexdigest()
-                        if row["password"] == password:
+                        password1 = password.encode()
+                        # encrypt the password and compare it with the password in the file
+                        password1 = hashlib.md5(password1).hexdigest()
+                        if row["password1"] == password1:
                             return Customer_Account(
-                                row["id"], row["name"], row["first_name"],
-                                row["age"], row["password"], row["country"],
-                                row["Daily_Use"], row["Saving"],
-                                row["Holidays"], row["Mortgage"])
+                                row["id"], row["last_name"], row["first_name"],
+                                row["username"], row["age"], row["email"],
+                                row["password"], row["password1"],
+                                row["country"], row["Daily_Use"],
+                                row["Saving"], row["Holidays"],
+                                row["Mortgage"])
                         else:
                             print("Wrong password")
                 if not flag:
-                    print("Wrong id")
+                    print("Wrong username")
 
-    def logout(self):
-        user = None
+    @classmethod
+    def logout(cls):
         print("You have logged out")
-        return user
 
     def check_wallet(self):
         res = []
@@ -136,23 +180,18 @@ class Customer_Account:
         with open("customer_account.csv", "r") as f:
             reader = [i for i in csv.DictReader(f)]
             for row in reader:
-                if row["id"] == self.id:
+                if row["username"] == self.username:
                     # update the row
-                    row["name"] = self.name
-                    row["first_name"] = self.first_name
-                    row["age"] = self.age
-                    row["password"] = self.password
-                    row["country"] = self.country
-                    row["Daily_Use"] = self.Daily_Use
-                    row["Saving"] = self.Saving
-                    row["Holidays"] = self.Holidays
+                    for key in row.keys():
+                        row[key] = getattr(self, key)
                     break
 
             # write to file
             with open("customer_account.csv", "w") as fw:
                 fieldnames = [
-                    "id", 'name', 'first_name', 'age', 'password', 'country',
-                    'Daily_Use', 'Saving', 'Holidays', 'Mortgage'
+                    'id', 'last_name', 'first_name', 'username', 'age',
+                    'email', 'password', 'password1', 'country', 'Daily_Use',
+                    'Saving', 'Holidays', 'Mortgage'
                 ]
                 writer = csv.DictWriter(fw, fieldnames=fieldnames)
                 writer.writeheader()
@@ -166,7 +205,7 @@ class Customer_Account:
             return "1000"
         with open("customer_account.csv", "r") as f:
             reader = csv.DictReader(f)
-            users = [int(row["id"]) for row in reader]
+            users = [int(row["id"]) for row in reader if row["id"].isdigit()]
             if not users:
                 return 1000
             else:
@@ -174,15 +213,17 @@ class Customer_Account:
         return max_id + 1
 
     @classmethod
-    def get_user_by_id(cls, id):
+    def get_user_by_username(cls, username):
         with open("customer_account.csv", "r") as f:
             reader = [i for i in csv.DictReader(f)]
             for row in reader:
-                if row["id"] == str(id):
-                    return Customer_Account(row["id"], row["name"],
-                                            row["first_name"], row["age"],
-                                            row["password"], row["country"],
-                                            row["Daily_Use"], row["Saving"],
-                                            row["Holidays"], row["Mortgage"])
+                if row["username"] == username:
+                    return Customer_Account(row["id"], row["last_name"],
+                                            row["first_name"], row["username"],
+                                            row["age"], row["email"],
+                                            row["password"], row["password1"],
+                                            row["country"], row["Daily_Use"],
+                                            row["Saving"], row["Holidays"],
+                                            row["Mortgage"])
             else:
                 return None
