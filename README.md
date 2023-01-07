@@ -45,7 +45,11 @@ ToDo:
 - [x] Change login ID to username
 - [x] Add email information
 - [x] Add bank_system class
+- [x] Test this system
 - [ ] Change md5 to self encrpt method
 - [ ] Fix bug after transfer finished. (It need user enter q to finish)
 
 ## Part2
+
+In Part 2, I crawled some transaction data from Bitstamp, and performed data cleaning and analysis.
+Details of Part 2 are displayed in Part2/Part2.ipynb.
