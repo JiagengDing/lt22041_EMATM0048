@@ -8,16 +8,7 @@ import os
 
 from customer import Customer_Account
 from wallet import Wallets
-
-
-def transfer_to_number(s):
-    try:
-        if float(s) >= 0:
-            return True, round(float(s), 2)
-        else:
-            return False, "Invalid amount"
-    except ValueError:
-        return False, "Invalid amount"
+from bank import BankingSystem
 
 
 def init_csv():
@@ -30,11 +21,10 @@ def init_csv():
         with open("wallets.csv", "w") as f:
             csv_writer = csv.DictWriter(f, fieldnames=Wallets.fieldnames)
             csv_writer.writeheader()
-    #  if not os.path.exists("bank_account.csv"):
-    #      with open("bank_account.csv", "w") as f:
-    #          csv_writer = csv.DictWriter(f, fieldnames=BankingSystem.fieldnames)
-    #          csv_writer.writeheader()
-    #
+    if not os.path.exists("bank_account.csv"):
+        with open("bank_account.csv", "w") as f:
+            csv_writer = csv.DictWriter(f, fieldnames=BankingSystem.fieldnames)
+            csv_writer.writeheader()
 
 
 def main():
@@ -76,6 +66,16 @@ def main():
                             print(f"{index}: {wallet.kind} {wallet.balance}")
                     elif choice == "2":
                         Wallets.create_wallet(user)
+                    elif choice == "3":
+                        BankingSystem.deposit(user)
+                    elif choice == "4":
+                        BankingSystem.withdraw(user)
+                    elif choice == "5":
+                        BankingSystem.transfer_to_wallet(user)
+                    elif choice == "6":
+                        BankingSystem.transfer_to_customer(user)
+                    elif choice == "7":
+                        Wallets.delete_wallet(user)
                     elif choice.upper() == "Q":
                         Customer_Account.logout()
                         break
