@@ -12,12 +12,12 @@ This project contains 3 python file to define class (customer_account, wallet an
 
 In the Customer_Account class, the methods of create_account, logg_in, log_out, check_wallet, update_info  are implemented.
 The create_accout classmethod could initiate a customer account with password, unique username and other info, and then write it in customer.csv file.
-Moreover, get_user_by_username is defined to login with username rather than ID, and get_id is used to creat account.
+Moreover, get_user_by_username is defined to login with username rather than ID, and get_id is used to create account ID(start from 1000).
 
 
-In the Wallet class, the methods of create_wallet, delete_wallet, get_wallet_info, update_info are implemented. The create_wallet classmethod could show sub menu, and then initiate a wallet with user ID, wallet kind and initial balance is 0. And get_id is used to create wallet with ID, get_wallet_by_id is used to select wallet. Moreover, is_able_to_withdraw(/deposit/transfer) methods is used to decide wallet function.
+In the Wallet class, the methods of create_wallet, delete_wallet, get_wallet_info, update_info are implemented. The create_wallet classmethod could show sub menu, and then initiate a wallet with user ID, wallet kind and initial balance is 0. And get_id is used to create wallet ID(start from 2000), get_wallet_by_id is used to select wallet. Moreover, is_able_to_withdraw(/deposit/transfer) methods is used to decide wallet function.
 
-In the BankingSystem account, I defined a transfer_to_number function to transfer deposit/withdraw/transfer amount to 2 decimal places (If it is not a number, system will prompt to re-enter). The classmethod add_record and get_id are used to record bank system's income information. The classmethod deposit and withdraw are used to implement the deposit and withdraw function.
+In the BankingSystem account, I defined a transfer_to_number function to transform deposit/withdraw/transfer amount to 2 decimal places (If it is not a number, system will prompt to re-enter). The classmethod add_record and get_id are used to record bank system's income information. The classmethod deposit and withdraw are used to implement the deposit and withdraw function.
 And the transfer_to_wallet & transfer_to_customer function are used to implement transfer and charge by bank.
 In these classmethod, they use check_wallet method in customer_account class and get wallet info firstly.
 
@@ -28,7 +28,7 @@ In the main.py file, I defined a init_csv function to create csv file firstly wh
 For unanticipated input, the determination of whether it is a number and the search for existing user information are used respectively, and then prompting for re-entry.
 
 
-I think some of the more remarkable aspects of this project include the use of a matrix to control the wallet function and the use of regular expressions to restrict email input. However, the encryption of user passwords via md5 did not complete the assignment requirement to define an encryption function.
+I think some of the more remarkable aspects of this project include the use of a matrix to control the wallet function and the use of regular expressions to restrict email input. However, the password encryption method via md5 did not complete the assignment requirement.
 
 
 - main.py: Run this file to launch banking system. Username is first_name+last_name(e.g jaggerding). Enter q to exit
@@ -46,8 +46,8 @@ ToDo:
 - [x] Add email information
 - [x] Add bank_system class
 - [x] Test this system
-- [ ] Change md5 to self encrpt method
-- [ ] Fix bug after transfer finished. (It need user enter q to finish)
+- [ ] Change md5 to self encrypt method
+- [x] Fix bug after transfer finished. (It need user enter q to finish)
 
 ## Part2
 

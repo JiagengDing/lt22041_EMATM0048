@@ -1,1 +1,3 @@
 id,kind,money,customer_id
+3001,transfer_to_wallet,0.075,2001
+3002,transfer_to_wallet,0.075,2001

@@ -275,14 +275,14 @@ class BankingSystem:
                 to_user_wallet.balance = to_user_wallet_balance
                 to_user_wallet.update_info()
 
-                BankingSystem.add_record("transfer_to_customer",
-                                         transfer_to_number(amount * 0.015)[1],
-                                         from_wallet.id)
+                BankingSystem.add_record(
+                    "transfer_to_customer",
+                    transfer_to_number(int(amount) * 0.015)[1], from_wallet.id)
                 print("Your transfer has been completed")
                 return
             else:
                 print("amount+fee(1.5%)=:",
-                      transfer_to_number(amount * (1 + 0.015))[1])
+                      transfer_to_number(int(amount) * (1 + 0.015))[1])
                 print("You don't have enough money in this wallet")
                 continue
 
@@ -294,4 +294,4 @@ class BankingSystem:
             if reader:
                 max_id = max(
                     [int(i["id"]) for i in reader if i["id"].isdigit()])
-        return max_id + 1
+        return str(int(max_id) + 1)
