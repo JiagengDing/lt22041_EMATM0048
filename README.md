@@ -46,7 +46,7 @@ ToDo:
 - [x] Add email information
 - [x] Add bank_system class
 - [x] Test this system
-- [ ] Change md5 to self encrypt method
+- [ ] Change md5 to other encrypt method
 - [x] Fix bug after transfer finished. (It need user enter q to finish)
 
 ## Part2
