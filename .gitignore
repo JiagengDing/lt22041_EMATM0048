@@ -3,6 +3,7 @@
 
 !/README.md
 !/.gitignore
+!/LISENCE
 
 !/Part1/*.py
 !/Part1/*.csv
